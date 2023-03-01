@@ -17,5 +17,5 @@ class ThreadLoadingApp(QThread):
     def run(self):
         for i in range(100):
             self._signal.emit(i)
-            time.sleep(0.05)
+            time.sleep(0.005)
         self._signal_result.emit(True)

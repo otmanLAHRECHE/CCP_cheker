@@ -3,7 +3,7 @@ from PyQt5 import uic, QtWidgets, QtCore
 from PyQt5.QtGui import QColor, QIcon
 from PyQt5.QtWidgets import QApplication, QGraphicsDropShadowEffect
 
-
+import app
 from threads import ThreadLoadingApp
 
 try:
@@ -45,13 +45,13 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             self.progress.setValue(100)
             self.label.setText("Wellcome")
-            self.next_page = chose_service.ChoseService()
+            self.next_page = app.App()
             self.next_page.show()
             self.close()
 
 def main():
     app = QApplication(sys.argv)
-    app.setWindowIcon(QIcon("./icons/app_icon.ico"))
+    app.setWindowIcon(QIcon("./icons/accountant.ico"))
     # app.setLayoutDirection(Qt.RightToLeft)
     window = MainWindow()
     window.show()
