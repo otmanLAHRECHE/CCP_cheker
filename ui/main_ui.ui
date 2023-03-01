@@ -361,10 +361,19 @@ border: 0px;</string>
                                <property name="text">
                                 <string>Total:</string>
                                </property>
+                               <property name="alignment">
+                                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                               </property>
                               </widget>
                              </item>
                              <item>
                               <widget class="QLabel" name="label_11">
+                               <property name="sizePolicy">
+                                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                                 <horstretch>0</horstretch>
+                                 <verstretch>0</verstretch>
+                                </sizepolicy>
+                               </property>
                                <property name="font">
                                 <font>
                                  <pointsize>12</pointsize>
