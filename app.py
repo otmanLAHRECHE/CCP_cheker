@@ -10,3 +10,5 @@ class App(QtWidgets.QMainWindow):
         super(App, self).__init__()
 
         uic.loadUi("ui/main_ui.ui", self)
+
+        
