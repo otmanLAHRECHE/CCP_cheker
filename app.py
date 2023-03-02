@@ -1,7 +1,7 @@
 import sys
 from PyQt5 import uic, QtWidgets, QtCore
 from PyQt5.QtGui import QColor
-from PyQt5.QtWidgets import QApplication, QGraphicsDropShadowEffect
+from PyQt5.QtWidgets import QApplication, QGraphicsDropShadowEffect, QMessageBox, QFileDialog
 
 
 
@@ -43,6 +43,43 @@ class App(QtWidgets.QMainWindow):
         self.table_compte = self.findChild(QtWidgets.QTableWidget, "tableWidget")
         self.import_file_compte = self.findChild(QtWidgets.QToolButton, "toolButton")
         self.reset_compte = self.findChild(QtWidgets.QPushButton, "pushButton")
+
+        self.file_vers_loaded = False
+        self.file_compte_loaded = False
+
+        self.import_file_vers.clicked.connect(self.dialog_load_vers)
+
+        self.scan.clicked.connect(self.scan_event)
+        self.reset_vers.clicked.connect(self.reset_vers_event)
+
+
+    def alert_(self, message):
+        alert = QMessageBox()
+        alert.setWindowTitle("alert")
+        alert.setText(message)
+        alert.exec_()
+
+    def dialog_load_vers(self):
+        file , check = QFileDialog.getOpenFileName(None, "QFileDialog.getOpenFileName()",
+                                               "", "Text Files (*.txt)")
+        if check:
+            print(file)
+            self.champ_vers.setText(file)
+            self.file_vers_loaded = True
+
+    
+    def scan_event(self):
+        if(self.file_vers_loaded == False):
+            self.alert_("importer le fichier .txt")
+        else:
+            print("ok")
+
+    def reset_vers_event(self):
+        self.file_vers_loaded = False
+        self.champ_vers.setText("")
+
+
+    
 
 
         
