@@ -211,11 +211,6 @@
                       </column>
                       <column>
                        <property name="text">
-                        <string>CCP</string>
-                       </property>
-                      </column>
-                      <column>
-                       <property name="text">
                         <string>RIP</string>
                        </property>
                       </column>
@@ -720,20 +715,6 @@ QFrame {
                              <property name="bottomMargin">
                               <number>3</number>
                              </property>
-                             <item row="0" column="0">
-                              <widget class="QCheckBox" name="checkBox">
-                               <property name="text">
-                                <string>ligne</string>
-                               </property>
-                              </widget>
-                             </item>
-                             <item row="1" column="1">
-                              <widget class="QCheckBox" name="checkBox_4">
-                               <property name="text">
-                                <string>valeur</string>
-                               </property>
-                              </widget>
-                             </item>
                              <item row="0" column="1">
                               <widget class="QCheckBox" name="checkBox_3">
                                <property name="text">
@@ -748,10 +729,17 @@ QFrame {
                                </property>
                               </widget>
                              </item>
-                             <item row="2" column="0">
-                              <widget class="QCheckBox" name="checkBox_5">
+                             <item row="0" column="0">
+                              <widget class="QCheckBox" name="checkBox">
                                <property name="text">
-                                <string>CCP</string>
+                                <string>ligne</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item row="1" column="1">
+                              <widget class="QCheckBox" name="checkBox_4">
+                               <property name="text">
+                                <string>valeur</string>
                                </property>
                               </widget>
                              </item>
@@ -967,7 +955,7 @@ border: 0px;</string>
                                   </item>
                                   <item>
                                    <property name="text">
-                                    <string>ccp</string>
+                                    <string>RIP</string>
                                    </property>
                                   </item>
                                   <item>

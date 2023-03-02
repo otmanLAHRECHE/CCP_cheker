@@ -28,7 +28,6 @@ class App(QtWidgets.QMainWindow):
 
         self.affichage_ligne = self.findChild(QtWidgets.QCheckBox, "checkBox")
         self.affichage_full_name = self.findChild(QtWidgets.QCheckBox, "checkBox_2")
-        self.affichage_ccp = self.findChild(QtWidgets.QCheckBox, "checkBox_5")
         self.affichage_rip = self.findChild(QtWidgets.QCheckBox, "checkBox_3")
         self.affichage_valeur = self.findChild(QtWidgets.QCheckBox, "checkBox_4")
 
@@ -53,6 +52,8 @@ class App(QtWidgets.QMainWindow):
         self.scan.clicked.connect(self.scan_event)
         self.reset_vers.clicked.connect(self.reset_vers_event)
 
+        self.accounter = 0
+
         self.versements_array = []
         self.accounts_array = []
 
@@ -72,18 +73,24 @@ class App(QtWidgets.QMainWindow):
             self.file_vers_loaded = True
             file_vers = open(file)
             self.versements_array = file_vers.readlines()
+            self.accounter = 0
+            self.total.setText(str(0))
+            if(len(self.versements_array)>0):
+                self.versements_array.remove(0)
+                self.dialog = Load_versement_dialog()
+                self.dialog.progress.setValue(0)
+                self.dialog.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+                self.dialog.show()
 
-            self.dialog = Load_versement_dialog()
-            self.dialog.progress.setValue(0)
-            self.dialog.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
-            self.dialog.show()
-
-            self.thr = ThreadLoadingVers(self.versements_array)
-            self.thr._signal.connect(self.signal_progress)
-            self.thr._signal_result.connect(self.signal_progress)
-            self.thr._signal_result_data.connect(self.signal_progress)
+                self.thr = ThreadLoadingVers(self.versements_array)
+                self.thr._signal.connect(self.signal_progress)
+                self.thr._signal_result.connect(self.signal_progress)
+                self.thr._signal_result_data.connect(self.signal_progress)
+                self.thr._signal_show.connect(self.signal_aff)
+                self.thr.start()
+            else:
+                self.alert_("le fichier est vide")
             
-
             
 
     def signal_progress(self, progress):
@@ -97,7 +104,11 @@ class App(QtWidgets.QMainWindow):
     
     def signal_aff(self, progress):
         if type(progress) == list:
-            self.dialog.full_name.setText(progress[])
+            self.dialog.full_name.setText(progress[0])
+            self.dialog.rip.setText(progress[1])
+            self.dialog.valeur.setText(str(progress[2]))
+            self.accounter = self.accounter + 1
+            self.total.setText(str(self.accounter))
 
 
     def scan_event(self):
@@ -110,6 +121,8 @@ class App(QtWidgets.QMainWindow):
     def reset_vers_event(self):
         self.file_vers_loaded = False
         self.champ_vers.setText("")
+        self.total.setText(str(0))
+        self.accounter = 0
 
 
     
