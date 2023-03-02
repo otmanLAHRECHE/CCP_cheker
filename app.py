@@ -31,7 +31,25 @@ class App(QtWidgets.QMainWindow):
         self.affichage_rip = self.findChild(QtWidgets.QCheckBox, "checkBox_3")
         self.affichage_valeur = self.findChild(QtWidgets.QCheckBox, "checkBox_4")
 
+
+        self.filter_ = self.findChild(QtWidgets.QComboBox, "comboBox")
+        self.search_with = self.findChild(QtWidgets.QComboBox, "comboBox_2")
+        self.search_input = self.findChild(QtWidgets.QLineEdit, "lineEdit_2")
+
+        self.search = self.findChild(QtWidgets.QPushButton, "pushButton_3")
+        self.reset_search = self.findChild(QtWidgets.QPushButton, "pushButton_4")
+
+        self.champ_compte = self.findChild(QtWidgets.QLineEdit, "lineEdit")
+        self.table_compte = self.findChild(QtWidgets.QTableWidget, "tableWidget")
+        self.import_file_compte = self.findChild(QtWidgets.QToolButton, "toolButton")
+        self.reset_compte = self.findChild(QtWidgets.QPushButton, "pushButton")
+
+
         
+
+        
+
+
 
 
 
