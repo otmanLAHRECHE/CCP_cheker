@@ -2,7 +2,8 @@ import sys
 from PyQt5 import uic, QtWidgets, QtCore
 from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QApplication, QGraphicsDropShadowEffect, QMessageBox, QFileDialog
-
+from threads import ThreadLoadingVers
+from dialogs import Load_versement_dialog
 
 
 class App(QtWidgets.QMainWindow):
@@ -52,6 +53,9 @@ class App(QtWidgets.QMainWindow):
         self.scan.clicked.connect(self.scan_event)
         self.reset_vers.clicked.connect(self.reset_vers_event)
 
+        self.versements_array = []
+        self.accounts_array = []
+
 
     def alert_(self, message):
         alert = QMessageBox()
@@ -66,13 +70,42 @@ class App(QtWidgets.QMainWindow):
             print(file)
             self.champ_vers.setText(file)
             self.file_vers_loaded = True
+            file_vers = open(file)
+            self.versements_array = file_vers.readlines()
 
+            self.dialog = Load_versement_dialog()
+            self.dialog.progress.setValue(0)
+            self.dialog.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+            self.dialog.show()
+
+            self.thr = ThreadLoadingVers(self.versements_array)
+            self.thr._signal.connect(self.signal_progress)
+            self.thr._signal_result.connect(self.signal_progress)
+            self.thr._signal_result_data.connect(self.signal_progress)
+            
+
+            
+
+    def signal_progress(self, progress):
+        if type(progress) == int:
+            self.dialog.progress.setValue(progress)
+        elif type(progress) == list:
+            print("okkkkk")
+        elif type(progress) == bool:
+            self.dialog.progress.setValue(100)
+            self.dialog.close()
     
+    def signal_aff(self, progress):
+        if type(progress) == list:
+            self.dialog.full_name.setText(progress[])
+
+
     def scan_event(self):
         if(self.file_vers_loaded == False):
             self.alert_("importer le fichier .txt")
         else:
             print("ok")
+
 
     def reset_vers_event(self):
         self.file_vers_loaded = False
