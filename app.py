@@ -52,6 +52,7 @@ class App(QtWidgets.QMainWindow):
         self.file_compte_loaded = True
 
         self.import_file_vers.clicked.connect(self.dialog_load_vers)
+        self.import_file_compte.clicked.connect(self.dialog_load_compte)
 
         self.scan.clicked.connect(self.scan_event)
         self.reset_vers.clicked.connect(self.reset_vers_event)
@@ -216,6 +217,16 @@ class App(QtWidgets.QMainWindow):
         if type(progress) == list:
             self.dialog.full_name.setText(progress[0])
             self.dialog.rip.setText(progress[1])   
+
+    
+    def reset_compte_event(self):
+        self.file_compte_loaded = False
+        self.champ_compte.setText("")   
+        stylesheet = \
+        "color:white;\n" \
+        + "background:qlineargradient(spread:pad, x1:1, y1:0.545, x2:0, y2:0.585, stop:0 rgba(184, 21, 21, 57), stop:0.487 rgba(182, 27, 13, 186), stop:1 rgba(184, 21, 21, 57));" 
+        self.status_frame.setStyleSheet(stylesheet)
+        self.status_label.setText("status: not ready (import account file)")
     
 
         
