@@ -27,7 +27,6 @@ class App(QtWidgets.QMainWindow):
         self.faut_compte = self.findChild(QtWidgets.QLabel, "label_8")
         self.faut_request = self.findChild(QtWidgets.QLabel, "label_9")
 
-        self.affichage_ligne = self.findChild(QtWidgets.QCheckBox, "checkBox")
         self.affichage_full_name = self.findChild(QtWidgets.QCheckBox, "checkBox_2")
         self.affichage_rip = self.findChild(QtWidgets.QCheckBox, "checkBox_3")
         self.affichage_valeur = self.findChild(QtWidgets.QCheckBox, "checkBox_4")
@@ -82,7 +81,7 @@ class App(QtWidgets.QMainWindow):
         file , check = QFileDialog.getOpenFileName(None, "QFileDialog.getOpenFileName()",
                                                "", "Text Files (*.txt)")
         if check:
-            print(file)
+            self.reset_vers_event()
             self.champ_vers.setText(file)
             self.file_vers_loaded = True
             file_vers = open(file)
@@ -144,6 +143,7 @@ class App(QtWidgets.QMainWindow):
             self.alert_("importer le fichier .txt")
         else:
             print("ok")
+            
 
 
     def reset_vers_event(self):
@@ -152,6 +152,9 @@ class App(QtWidgets.QMainWindow):
         self.table_vers.setRowCount(0)
         self.champ_vers.setText("")
         self.total.setText(str(0))
+        self.valide.setText(str(0))
+        self.faut_request.setText(str(0))
+        self.faut_compte.setText(str(0))
         self.accounter = 0
         if(self.file_compte_loaded == True):
             stylesheet = \
@@ -180,7 +183,6 @@ class App(QtWidgets.QMainWindow):
         file , check = QFileDialog.getOpenFileName(None, "QFileDialog.getOpenFileName()",
                                                "", "Text Files (*.txt)")
         if check:
-            print(file)
             self.reset_compte_event()
             self.champ_compte.setText(file)
             self.file_compte_loaded = True
@@ -203,6 +205,7 @@ class App(QtWidgets.QMainWindow):
             else:
                 self.alert_("le fichier est vide")
     
+
     def signal_progress_account(self, progress):
         if type(progress) == int:
             self.dialog.progress.setValue(progress)
@@ -248,7 +251,6 @@ class App(QtWidgets.QMainWindow):
                 self.table_compte.item(row, 0).setBackground(QColor(220,255,220))
                 self.table_compte.item(row, 1).setBackground(QColor(220,255,220))
             
-
     
     def reset_compte_event(self):
         self.file_compte_loaded = False
