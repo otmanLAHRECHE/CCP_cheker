@@ -84,11 +84,22 @@ class ThreadLoadingCompte(QThread):
             if(len(ligne)>0):
                 rip = ligne[1:21]
                 full_name = ligne[22:49]
+                pas_thr = True
+                for j in self.ret:
+                    if(j[0] == full_name):
+                        pas_thr = False
+                
                 compt.append(full_name)
                 compt.append(rip)
+                if(pas_thr):
+                    compt.append("good")
+                    self.ret.append(compt)
+                else:
+                    compt.append("dup")          
+                
                 self._signal_show.emit(compt)
 
-                self.ret.append(compt)
+                
 
             pors = i * 100
             pors = pors / len(self.array)

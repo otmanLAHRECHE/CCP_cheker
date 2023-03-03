@@ -1,7 +1,7 @@
 import sys
 from PyQt5 import uic, QtWidgets, QtCore ,QtGui, Qt
 from PyQt5.QtGui import QColor
-from PyQt5.QtWidgets import QApplication, QGraphicsDropShadowEffect, QMessageBox, QFileDialog
+from PyQt5.QtWidgets import QApplication, QGraphicsDropShadowEffect, QMessageBox, QFileDialog, QTableWidgetItem
 from threads import ThreadLoadingVers, ThreadLoadingCompte
 from dialogs import Load_versement_dialog, CustomDialog, Load_account_dialog
 
@@ -47,6 +47,14 @@ class App(QtWidgets.QMainWindow):
 
         self.status_label = self.findChild(QtWidgets.QLabel, "label_18")
         self.status_frame = self.findChild(QtWidgets.QFrame, "frame_26")
+
+
+        self.table_compte.setColumnWidth(0, 350)
+        self.table_compte.setColumnWidth(1, 450)
+
+        
+        self.table_compte.setRowCount(0)
+        self.table_vers.setRowCount(0)
 
         self.file_vers_loaded = False
         self.file_compte_loaded = True
@@ -103,7 +111,7 @@ class App(QtWidgets.QMainWindow):
         if type(progress) == int:
             self.dialog.progress.setValue(progress)
         elif type(progress) == list:
-            print("okkkkk")
+            self.versements_array = progress
         elif type(progress) == bool:
             self.dialog.progress.setValue(100)
             self.dialog.close()
@@ -140,6 +148,8 @@ class App(QtWidgets.QMainWindow):
 
     def reset_vers_event(self):
         self.file_vers_loaded = False
+        self.versements_array = []
+        self.table_vers.setRowCount(0)
         self.champ_vers.setText("")
         self.total.setText(str(0))
         self.accounter = 0
@@ -171,10 +181,12 @@ class App(QtWidgets.QMainWindow):
                                                "", "Text Files (*.txt)")
         if check:
             print(file)
+            self.reset_compte_event()
             self.champ_compte.setText(file)
             self.file_compte_loaded = True
             file_compte = open(file)
             self.accounts_array = file_compte.readlines()
+            self.dup = 0
             if(len(self.accounts_array)>0):
                 self.accounts_array.pop(0)
                 self.dialog = Load_account_dialog()
@@ -195,11 +207,13 @@ class App(QtWidgets.QMainWindow):
         if type(progress) == int:
             self.dialog.progress.setValue(progress)
         elif type(progress) == list:
-            print("okkkkk")
+            self.accounts_array = progress
         elif type(progress) == bool:
             self.dialog.progress.setValue(100)
             self.dialog.close()
             self.file_compte_loaded = True
+            if(self.dup > 0):
+                self.alert_("supprimer les duplications")
             if(self.file_vers_loaded == True):
                 self.status_label.setText("status: ready")
                 stylesheet = \
@@ -217,12 +231,31 @@ class App(QtWidgets.QMainWindow):
     def signal_aff_account(self, progress):
         if type(progress) == list:
             self.dialog.full_name.setText(progress[0])
-            self.dialog.rip.setText(progress[1])   
+            self.dialog.rip.setText(progress[1])
+
+            row = self.table_compte.rowCount()
+            if(progress[2]=="dup"):
+                self.table_compte.insertRow(row)   
+                self.table_compte.setItem(row, 0, QTableWidgetItem(progress[0]))
+                self.table_compte.setItem(row, 1, QTableWidgetItem(progress[1]))
+                self.table_compte.item(row, 0).setBackground(QColor(220, 242, 24))
+                self.table_compte.item(row, 1).setBackground(QColor(220, 242, 24))
+                self.dup = self.dup + 1
+            else:
+                self.table_compte.insertRow(row)   
+                self.table_compte.setItem(row, 0, QTableWidgetItem(progress[0]))
+                self.table_compte.setItem(row, 1, QTableWidgetItem(progress[1]))
+                self.table_compte.item(row, 0).setBackground(QColor(220,255,220))
+                self.table_compte.item(row, 1).setBackground(QColor(220,255,220))
+            
 
     
     def reset_compte_event(self):
         self.file_compte_loaded = False
-        self.champ_compte.setText("")   
+        self.accounts_array = []
+        self.table_compte.setRowCount(0)
+        self.champ_compte.setText("")
+        self.dup = 0   
         stylesheet = \
         "color:white;\n" \
         + "background:qlineargradient(spread:pad, x1:1, y1:0.545, x2:0, y2:0.585, stop:0 rgba(184, 21, 21, 57), stop:0.487 rgba(182, 27, 13, 186), stop:1 rgba(184, 21, 21, 57));" 

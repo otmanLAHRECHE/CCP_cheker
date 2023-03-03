@@ -66,7 +66,7 @@
           <string notr="true">background-color: rgb(211, 219, 224);</string>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="tab">
           <attribute name="title">
@@ -216,27 +216,50 @@
                       </property>
                       <column>
                        <property name="text">
-                        <string>ligne</string>
-                       </property>
-                      </column>
-                      <column>
-                       <property name="text">
                         <string>nom et prenom</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>9</pointsize>
+                         <weight>75</weight>
+                         <bold>true</bold>
+                        </font>
                        </property>
                       </column>
                       <column>
                        <property name="text">
                         <string>RIP</string>
                        </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>9</pointsize>
+                         <weight>75</weight>
+                         <bold>true</bold>
+                        </font>
+                       </property>
                       </column>
                       <column>
                        <property name="text">
                         <string>valeur</string>
                        </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>9</pointsize>
+                         <weight>75</weight>
+                         <bold>true</bold>
+                        </font>
+                       </property>
                       </column>
                       <column>
                        <property name="text">
                         <string>status</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>9</pointsize>
+                         <weight>75</weight>
+                         <bold>true</bold>
+                        </font>
                        </property>
                       </column>
                      </widget>
@@ -1248,17 +1271,26 @@ QFrame {
                      <widget class="QTableWidget" name="tableWidget_2">
                       <column>
                        <property name="text">
-                        <string>ligne</string>
-                       </property>
-                      </column>
-                      <column>
-                       <property name="text">
                         <string>nom et prenom</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>9</pointsize>
+                         <weight>75</weight>
+                         <bold>true</bold>
+                        </font>
                        </property>
                       </column>
                       <column>
                        <property name="text">
                         <string>RIP</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>9</pointsize>
+                         <weight>75</weight>
+                         <bold>true</bold>
+                        </font>
                        </property>
                       </column>
                      </widget>
