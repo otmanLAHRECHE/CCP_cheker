@@ -1258,11 +1258,6 @@ QFrame {
                       </column>
                       <column>
                        <property name="text">
-                        <string>CCP</string>
-                       </property>
-                      </column>
-                      <column>
-                       <property name="text">
                         <string>RIP</string>
                        </property>
                       </column>

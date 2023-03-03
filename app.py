@@ -3,7 +3,7 @@ from PyQt5 import uic, QtWidgets, QtCore ,QtGui, Qt
 from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QApplication, QGraphicsDropShadowEffect, QMessageBox, QFileDialog
 from threads import ThreadLoadingVers
-from dialogs import Load_versement_dialog, CustomDialog
+from dialogs import Load_versement_dialog, CustomDialog, Load_account_dialog
 
 
 
@@ -130,11 +130,10 @@ class App(QtWidgets.QMainWindow):
 
 
     def scan_event(self):
-        if(self.file_vers_loaded == False):
+        if(self.file_vers_loaded == False or self.file_compte_loaded == False):
             self.alert_("importer le fichier .txt")
         else:
             print("ok")
-
 
 
     def reset_vers_event(self):
@@ -155,7 +154,6 @@ class App(QtWidgets.QMainWindow):
             self.status_frame.setStyleSheet(stylesheet)
             self.status_label.setText("status: not ready (import account file)")
 
-
     
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
         message = "Es-tu sûr de quiter?"
@@ -165,7 +163,60 @@ class App(QtWidgets.QMainWindow):
         else:
             a0.ignore()
 
-        
+    
+    def dialog_load_compte(self):
+        file , check = QFileDialog.getOpenFileName(None, "QFileDialog.getOpenFileName()",
+                                               "", "Text Files (*.txt)")
+        if check:
+            print(file)
+            self.champ_compte.setText(file)
+            self.file_compte_loaded = True
+            file_compte = open(file)
+            self.accounts_array = file_compte.readlines()
+            if(len(self.accounts_array)>0):
+                self.accounts_array.pop(0)
+                self.dialog = Load_account_dialog()
+                self.dialog.progress.setValue(0)
+                self.dialog.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+                self.dialog.show()
+
+                self.thr = ThreadLoadingVers(self.accounts_array)
+                self.thr._signal.connect(self.signal_progress_account)
+                self.thr._signal_result.connect(self.signal_progress_account)
+                self.thr._signal_result_data.connect(self.signal_progress_account)
+                self.thr._signal_show.connect(self.signal_aff_account)
+                self.thr.start()
+            else:
+                self.alert_("le fichier est vide")
+    
+    def signal_progress_account(self, progress):
+        if type(progress) == int:
+            self.dialog.progress.setValue(progress)
+        elif type(progress) == list:
+            print("okkkkk")
+        elif type(progress) == bool:
+            self.dialog.progress.setValue(100)
+            self.dialog.close()
+            self.file_compte_loaded = True
+            if(self.file_vers_loaded == True):
+                self.status_label.setText("status: ready")
+                stylesheet = \
+                "color:white;\n" \
+                + "background:qlineargradient(spread:pad, x1:1, y1:0.545, x2:0, y2:0.585, stop:0 rgba(2, 36, 0, 73), stop:24 rgba(36, 157, 17, 100), stop:100 rgba(0, 255, 119, 100));" 
+                self.status_frame.setStyleSheet(stylesheet)
+            else:
+                stylesheet = \
+                "color:white;\n" \
+                + "background:qlineargradient(spread:pad, x1:1, y1:0.545, x2:0, y2:0.585, stop:0 rgba(184, 21, 21, 57), stop:0.487 rgba(182, 27, 13, 186), stop:1 rgba(184, 21, 21, 57));" 
+                self.status_frame.setStyleSheet(stylesheet)
+                self.status_label.setText("status: not ready (import versement file)")
+            
+
+    def signal_aff_account(self, progress):
+        if type(progress) == list:
+            self.dialog.full_name.setText(progress[0])
+            self.dialog.rip.setText(progress[1])   
+    
 
         
 

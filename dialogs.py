@@ -36,3 +36,15 @@ class CustomDialog(QtWidgets.QDialog):
         self.layout.addWidget(message)
         self.layout.addWidget(self.buttonBox)
         self.setLayout(self.layout)
+
+
+class Load_account_dialog(QtWidgets.QDialog):
+    def __init__(self):
+        super(Load_versement_dialog, self).__init__()
+        uic.loadUi("./ui/dialog_load_compte.ui", self)
+        self.setWindowTitle("importer les CCP comptes")
+
+        self.full_name = self.findChild(QtWidgets.QLabel, "label_4")
+        self.rip = self.findChild(QtWidgets.QLabel, "label_5")
+
+        self.progress = self.findChild(QtWidgets.QProgressBar, "progressBar")
