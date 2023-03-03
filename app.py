@@ -1,9 +1,10 @@
 import sys
-from PyQt5 import uic, QtWidgets, QtCore
+from PyQt5 import uic, QtWidgets, QtCore ,QtGui, Qt
 from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QApplication, QGraphicsDropShadowEffect, QMessageBox, QFileDialog
 from threads import ThreadLoadingVers
-from dialogs import Load_versement_dialog
+from dialogs import Load_versement_dialog, CustomDialog
+
 
 
 class App(QtWidgets.QMainWindow):
@@ -44,8 +45,11 @@ class App(QtWidgets.QMainWindow):
         self.import_file_compte = self.findChild(QtWidgets.QToolButton, "toolButton")
         self.reset_compte = self.findChild(QtWidgets.QPushButton, "pushButton")
 
+        self.status_label = self.findChild(QtWidgets.QLabel, "label_18")
+        self.status_frame = self.findChild(QtWidgets.QFrame, "frame_26")
+
         self.file_vers_loaded = False
-        self.file_compte_loaded = False
+        self.file_compte_loaded = True
 
         self.import_file_vers.clicked.connect(self.dialog_load_vers)
 
@@ -76,7 +80,7 @@ class App(QtWidgets.QMainWindow):
             self.accounter = 0
             self.total.setText(str(0))
             if(len(self.versements_array)>0):
-                self.versements_array.remove(0)
+                self.versements_array.pop(0)
                 self.dialog = Load_versement_dialog()
                 self.dialog.progress.setValue(0)
                 self.dialog.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
@@ -101,6 +105,20 @@ class App(QtWidgets.QMainWindow):
         elif type(progress) == bool:
             self.dialog.progress.setValue(100)
             self.dialog.close()
+            self.file_vers_loaded = True
+            if(self.file_compte_loaded == True):
+                self.status_label.setText("status: ready")
+                stylesheet = \
+                "color:white;\n" \
+                + "background:qlineargradient(spread:pad, x1:1, y1:0.545, x2:0, y2:0.585, stop:0 rgba(2, 36, 0, 73), stop:24 rgba(36, 157, 17, 100), stop:100 rgba(0, 255, 119, 100));" 
+                self.status_frame.setStyleSheet(stylesheet)
+            else:
+                stylesheet = \
+                "color:white;\n" \
+                + "background:qlineargradient(spread:pad, x1:1, y1:0.545, x2:0, y2:0.585, stop:0 rgba(184, 21, 21, 57), stop:0.487 rgba(182, 27, 13, 186), stop:1 rgba(184, 21, 21, 57));" 
+                self.status_frame.setStyleSheet(stylesheet)
+                self.status_label.setText("status: not ready (import account file)")
+
     
     def signal_aff(self, progress):
         if type(progress) == list:
@@ -118,15 +136,34 @@ class App(QtWidgets.QMainWindow):
             print("ok")
 
 
+
     def reset_vers_event(self):
         self.file_vers_loaded = False
         self.champ_vers.setText("")
         self.total.setText(str(0))
         self.accounter = 0
+        if(self.file_compte_loaded == True):
+            stylesheet = \
+            "color:white;\n" \
+            + "background:qlineargradient(spread:pad, x1:1, y1:0.545, x2:0, y2:0.585, stop:0 rgba(184, 21, 21, 57), stop:0.487 rgba(182, 27, 13, 186), stop:1 rgba(184, 21, 21, 57));" 
+            self.status_frame.setStyleSheet(stylesheet)
+            self.status_label.setText("status: not ready (import versement file)")
+        else:
+            stylesheet = \
+            "color:white;\n" \
+            + "background:qlineargradient(spread:pad, x1:1, y1:0.545, x2:0, y2:0.585, stop:0 rgba(184, 21, 21, 57), stop:0.487 rgba(182, 27, 13, 186), stop:1 rgba(184, 21, 21, 57));" 
+            self.status_frame.setStyleSheet(stylesheet)
+            self.status_label.setText("status: not ready (import account file)")
 
 
     
-
+    def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
+        message = "Es-tu sûr de quiter?"
+        dialog = CustomDialog(message)
+        if dialog.exec():
+            self.close()
+        else:
+            a0.ignore()
 
         
 

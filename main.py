@@ -8,7 +8,7 @@ from threads import ThreadLoadingApp
 
 try:
     from ctypes import windll  # Only exists on Windows.
-    myappid = 'EPSP_Djanet.EPSP_Guard.1'
+    myappid = 'CCP_cheker.1'
     windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 except ImportError:
     pass
