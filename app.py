@@ -2,7 +2,7 @@ import sys
 from PyQt5 import uic, QtWidgets, QtCore ,QtGui, Qt
 from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QApplication, QGraphicsDropShadowEffect, QMessageBox, QFileDialog
-from threads import ThreadLoadingVers
+from threads import ThreadLoadingVers, ThreadLoadingCompte
 from dialogs import Load_versement_dialog, CustomDialog, Load_account_dialog
 
 
@@ -40,10 +40,10 @@ class App(QtWidgets.QMainWindow):
         self.search = self.findChild(QtWidgets.QPushButton, "pushButton_3")
         self.reset_search = self.findChild(QtWidgets.QPushButton, "pushButton_4")
 
-        self.champ_compte = self.findChild(QtWidgets.QLineEdit, "lineEdit")
-        self.table_compte = self.findChild(QtWidgets.QTableWidget, "tableWidget")
-        self.import_file_compte = self.findChild(QtWidgets.QToolButton, "toolButton")
-        self.reset_compte = self.findChild(QtWidgets.QPushButton, "pushButton")
+        self.champ_compte = self.findChild(QtWidgets.QLineEdit, "lineEdit_3")
+        self.table_compte = self.findChild(QtWidgets.QTableWidget, "tableWidget_2")
+        self.import_file_compte = self.findChild(QtWidgets.QToolButton, "toolButton_2")
+        self.reset_compte = self.findChild(QtWidgets.QPushButton, "pushButton_5")
 
         self.status_label = self.findChild(QtWidgets.QLabel, "label_18")
         self.status_frame = self.findChild(QtWidgets.QFrame, "frame_26")
@@ -56,6 +56,7 @@ class App(QtWidgets.QMainWindow):
 
         self.scan.clicked.connect(self.scan_event)
         self.reset_vers.clicked.connect(self.reset_vers_event)
+        self.reset_compte.clicked.connect(self.reset_compte_event)
 
         self.accounter = 0
 
@@ -181,7 +182,7 @@ class App(QtWidgets.QMainWindow):
                 self.dialog.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
                 self.dialog.show()
 
-                self.thr = ThreadLoadingVers(self.accounts_array)
+                self.thr = ThreadLoadingCompte(self.accounts_array)
                 self.thr._signal.connect(self.signal_progress_account)
                 self.thr._signal_result.connect(self.signal_progress_account)
                 self.thr._signal_result_data.connect(self.signal_progress_account)

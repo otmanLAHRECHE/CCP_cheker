@@ -40,7 +40,7 @@ class CustomDialog(QtWidgets.QDialog):
 
 class Load_account_dialog(QtWidgets.QDialog):
     def __init__(self):
-        super(Load_versement_dialog, self).__init__()
+        super(Load_account_dialog, self).__init__()
         uic.loadUi("./ui/dialog_load_compte.ui", self)
         self.setWindowTitle("importer les CCP comptes")
 
