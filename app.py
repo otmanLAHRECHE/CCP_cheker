@@ -369,7 +369,30 @@ class App(QtWidgets.QMainWindow):
 
 
 
+    def filter_with_type(self, value):
 
+        if(value == "tout"):
+            for i in range(self.table_vers.rowCount()):
+                self.table_vers.setRowHidden(i, False)
+        elif(value == "valide"):
+            for i in range(self.table_vers.rowCount()):
+                if(self.table_vers.item(i, 3).text() == "valide"):
+                    self.table_vers.setRowHidden(i, False)
+                else:
+                    self.table_vers.setRowHidden(i, True)
+        elif(value == "faut compte"):
+            for i in range(self.table_vers.rowCount()):
+                if(self.table_vers.item(i, 3).text() == "faut compte!!"):
+                    self.table_vers.setRowHidden(i, False)
+                else:
+                    self.table_vers.setRowHidden(i, True)
+        
+        elif(value == "faut request"):
+            for i in range(self.table_vers.rowCount()):
+                if(self.table_vers.item(i, 3).text() == "n'existe pas sur DB"):
+                    self.table_vers.setRowHidden(i, False)
+                else:
+                    self.table_vers.setRowHidden(i, True)
 
 
 
