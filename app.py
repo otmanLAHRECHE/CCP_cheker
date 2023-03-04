@@ -42,6 +42,9 @@ class App(QtWidgets.QMainWindow):
         self.status_label = self.findChild(QtWidgets.QLabel, "label_18")
         self.status_frame = self.findChild(QtWidgets.QFrame, "frame_26")
 
+        self.search_compte = self.findChild(QtWidgets.QLineEdit, "lineEdit_4")
+        self.search_compte_type = self.findChild(QtWidgets.QLineEdit, "comboBox_3")
+
         self.table_vers.setColumnWidth(0, 180)
         self.table_vers.setColumnWidth(1, 180)
         self.table_vers.setColumnWidth(2, 130)
@@ -53,6 +56,9 @@ class App(QtWidgets.QMainWindow):
         
         self.table_compte.setRowCount(0)
         self.table_vers.setRowCount(0)
+
+        self.table_compte.setSortingEnabled(True)
+        self.table_vers.setSortingEnabled(True)
 
         self.file_vers_loaded = False
         self.file_compte_loaded = False
