@@ -2,7 +2,7 @@ import sys
 from PyQt5 import uic, QtWidgets, QtCore ,QtGui, Qt
 from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QApplication, QGraphicsDropShadowEffect, QMessageBox, QFileDialog, QTableWidgetItem
-from threads import ThreadLoadingVers, ThreadLoadingCompte
+from threads import ThreadLoadingVers, ThreadLoadingCompte, ThreadScan
 from dialogs import Load_versement_dialog, CustomDialog, Load_account_dialog
 
 
@@ -27,11 +27,6 @@ class App(QtWidgets.QMainWindow):
         self.faut_compte = self.findChild(QtWidgets.QLabel, "label_8")
         self.faut_request = self.findChild(QtWidgets.QLabel, "label_9")
 
-        self.affichage_full_name = self.findChild(QtWidgets.QCheckBox, "checkBox_2")
-        self.affichage_rip = self.findChild(QtWidgets.QCheckBox, "checkBox_3")
-        self.affichage_valeur = self.findChild(QtWidgets.QCheckBox, "checkBox_4")
-
-
         self.filter_ = self.findChild(QtWidgets.QComboBox, "comboBox")
         self.search_with = self.findChild(QtWidgets.QComboBox, "comboBox_2")
         self.search_input = self.findChild(QtWidgets.QLineEdit, "lineEdit_2")
@@ -47,6 +42,10 @@ class App(QtWidgets.QMainWindow):
         self.status_label = self.findChild(QtWidgets.QLabel, "label_18")
         self.status_frame = self.findChild(QtWidgets.QFrame, "frame_26")
 
+        self.table_vers.setColumnWidth(0, 180)
+        self.table_vers.setColumnWidth(1, 180)
+        self.table_vers.setColumnWidth(2, 130)
+        self.table_vers.setColumnWidth(3, 180)
 
         self.table_compte.setColumnWidth(0, 350)
         self.table_compte.setColumnWidth(1, 450)
@@ -56,7 +55,7 @@ class App(QtWidgets.QMainWindow):
         self.table_vers.setRowCount(0)
 
         self.file_vers_loaded = False
-        self.file_compte_loaded = True
+        self.file_compte_loaded = False
 
         self.import_file_vers.clicked.connect(self.dialog_load_vers)
         self.import_file_compte.clicked.connect(self.dialog_load_compte)
@@ -66,9 +65,13 @@ class App(QtWidgets.QMainWindow):
         self.reset_compte.clicked.connect(self.reset_compte_event)
 
         self.accounter = 0
+        self.valide_accounter = 0
+        self.faut_compte_accounter = 0
+        self.faut_request_accounter = 0
 
         self.versements_array = []
         self.accounts_array = []
+        self.result_array = []
 
 
     def alert_(self, message):
@@ -142,13 +145,81 @@ class App(QtWidgets.QMainWindow):
         if(self.file_vers_loaded == False or self.file_compte_loaded == False):
             self.alert_("importer le fichier .txt")
         else:
-            print("ok")
             
+            self.dialog = Load_versement_dialog()
+            self.dialog.progress.setValue(0)
+            self.dialog.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+            self.dialog.show()
+
+            self.thr = ThreadScan(self.versements_array, self.accounts_array)
+            self.thr._signal.connect(self.signal_progress_scan)
+            self.thr._signal_result.connect(self.signal_progress_scan)
+            self.thr._signal_result_data.connect(self.signal_progress_scan)
+            self.thr._signal_show.connect(self.signal_aff_scan)
+            self.thr.start()
+            
+    
+    def signal_progress_scan(self, progress):
+        if type(progress) == int:
+            self.dialog.progress.setValue(progress)
+        elif type(progress) == list:
+            self.result_array = progress
+        elif type(progress) == bool:
+            self.dialog.progress.setValue(100)
+            self.dialog.close()
+
+    def signal_aff_scan(self, progress):
+        if type(progress) == list:
+            self.dialog.full_name.setText(progress[0])
+            self.dialog.rip.setText(progress[1])
+            self.dialog.valeur.setText(str(progress[2]))
+
+            row = self.table_vers.rowCount()
+            if(progress[3]=="valide"):
+                self.table_vers.insertRow(row)   
+                self.table_vers.setItem(row, 0, QTableWidgetItem(progress[0]))
+                self.table_vers.setItem(row, 1, QTableWidgetItem(progress[1]))
+                self.table_vers.setItem(row, 2, QTableWidgetItem(str(progress[2])))
+                self.table_vers.setItem(row, 3, QTableWidgetItem(str(progress[3])))
+                self.table_vers.item(row, 0).setBackground(QColor(220,255,220))
+                self.table_vers.item(row, 1).setBackground(QColor(220,255,220))
+                self.table_vers.item(row, 2).setBackground(QColor(220,255,220))
+                self.table_vers.item(row, 3).setBackground(QColor(220,255,220))
+                self.valide_accounter = self.valide_accounter + 1
+                self.valide.setText(str(self.valide_accounter))
+            elif(progress[3]=="faut compte!!"):
+                self.table_vers.insertRow(row)   
+                self.table_vers.setItem(row, 0, QTableWidgetItem(progress[0]))
+                self.table_vers.setItem(row, 1, QTableWidgetItem(progress[1]))
+                self.table_vers.setItem(row, 2, QTableWidgetItem(str(progress[2])))
+                self.table_vers.setItem(row, 3, QTableWidgetItem(str(progress[3])))
+                self.table_vers.item(row, 0).setBackground(QColor(247, 96, 96))
+                self.table_vers.item(row, 1).setBackground(QColor(247, 96, 96))
+                self.table_vers.item(row, 2).setBackground(QColor(247, 96, 96))
+                self.table_vers.item(row, 3).setBackground(QColor(247, 96, 96))
+                self.faut_compte_accounter = self.faut_compte_accounter + 1
+                self.faut_compte.setText(str(self.faut_compte_accounter))
+            elif(progress[3]=="n'existe pas sur DB"):
+                self.table_vers.insertRow(row)   
+                self.table_vers.setItem(row, 0, QTableWidgetItem(progress[0]))
+                self.table_vers.setItem(row, 1, QTableWidgetItem(progress[1]))
+                self.table_vers.setItem(row, 2, QTableWidgetItem(str(progress[2])))
+                self.table_vers.setItem(row, 3, QTableWidgetItem(str(progress[3])))
+                self.table_vers.item(row, 0).setBackground(QColor(247, 237, 96))
+                self.table_vers.item(row, 1).setBackground(QColor(247, 237, 96))
+                self.table_vers.item(row, 2).setBackground(QColor(247, 237, 96))
+                self.table_vers.item(row, 3).setBackground(QColor(247, 237, 96))
+                self.faut_request_accounter = self.faut_request_accounter + 1
+                self.faut_request.setText(str(self.faut_request_accounter))
+
+            
+
 
 
     def reset_vers_event(self):
         self.file_vers_loaded = False
         self.versements_array = []
+        self.result_array = []
         self.table_vers.setRowCount(0)
         self.champ_vers.setText("")
         self.total.setText(str(0))
@@ -156,6 +227,9 @@ class App(QtWidgets.QMainWindow):
         self.faut_request.setText(str(0))
         self.faut_compte.setText(str(0))
         self.accounter = 0
+        self.valide_accounter = 0
+        self.faut_compte_accounter = 0
+        self.faut_request_accounter = 0
         if(self.file_compte_loaded == True):
             stylesheet = \
             "color:white;\n" \

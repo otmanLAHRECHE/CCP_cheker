@@ -126,7 +126,6 @@ class ThreadScan(QThread):
     def run(self):
         
         for i in range(len(self.array_vers)):
-            verif = []
             vers = self.array_vers[i]
             test = False
             for j in range(len(self.array_compte)):
@@ -140,31 +139,17 @@ class ThreadScan(QThread):
             
             if(test == False):
                 vers.append("n'existe pas sur DB")
-            
+
+            self._signal_show.emit(vers)
             self.ret.append(vers)
+            pors = i * 100
+            pors = pors / len(self.array_vers)
+            self._signal.emit(pors)
+            time.sleep(0.01)
+
+        self._signal_result_data.emit(self.ret)
+        self._signal_result.emit(True)
             
         
                     
 
-
-        for i in range(len(self.array)):
-            ligne = self.array[i]
-            vers = []
-            if(len(ligne)>0):
-                rip = ligne[1:21]
-                value = ligne[21:34]
-                full_name = ligne[34:61]
-                vers.append(full_name)
-                vers.append(rip)
-                value = int(value) / 100
-                vers.append(value)
-                self._signal_show.emit(vers)
-
-                self.ret.append(vers)
-
-            pors = i * 100
-            pors = pors / len(self.array)
-            self._signal.emit(pors)
-            time.sleep(0.02)
-        self._signal_result_data.emit(self.ret)
-        self._signal_result.emit(True)
