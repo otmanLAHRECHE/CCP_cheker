@@ -66,6 +66,7 @@ class App(QtWidgets.QMainWindow):
         self.reset_compte.clicked.connect(self.reset_compte_event)
 
         self.search_compte.textChanged.connect(self.filter_compte_changed)
+        self.filter_.currentIndexChanged.connect(self.filter_combo_changed)
 
         self.search_input.textChanged.connect(self.filter_vers_changed)
 
@@ -368,32 +369,34 @@ class App(QtWidgets.QMainWindow):
         self.filter_vers_apr(text)
 
 
-
     def filter_with_type(self, value):
-
-        if(value == "tout"):
+        
+        if(value == 0):
             for i in range(self.table_vers.rowCount()):
                 self.table_vers.setRowHidden(i, False)
-        elif(value == "valide"):
+        elif(value == 1):
             for i in range(self.table_vers.rowCount()):
                 if(self.table_vers.item(i, 3).text() == "valide"):
                     self.table_vers.setRowHidden(i, False)
                 else:
                     self.table_vers.setRowHidden(i, True)
-        elif(value == "faut compte"):
+        elif(value == 2):
             for i in range(self.table_vers.rowCount()):
                 if(self.table_vers.item(i, 3).text() == "faut compte!!"):
                     self.table_vers.setRowHidden(i, False)
                 else:
                     self.table_vers.setRowHidden(i, True)
         
-        elif(value == "faut request"):
+        elif(value == 3):
             for i in range(self.table_vers.rowCount()):
                 if(self.table_vers.item(i, 3).text() == "n'existe pas sur DB"):
                     self.table_vers.setRowHidden(i, False)
                 else:
                     self.table_vers.setRowHidden(i, True)
 
+
+    def filter_combo_changed(self, value):
+        self.filter_with_type(value)
 
 
 
