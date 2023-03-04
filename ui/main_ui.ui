@@ -66,7 +66,7 @@
           <string notr="true">background-color: rgb(211, 219, 224);</string>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="tab">
           <attribute name="title">
@@ -833,79 +833,6 @@ border: 0px;</string>
                               </widget>
                              </item>
                              <item>
-                              <widget class="QFrame" name="frame_17">
-                               <property name="sizePolicy">
-                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                                 <horstretch>0</horstretch>
-                                 <verstretch>0</verstretch>
-                                </sizepolicy>
-                               </property>
-                               <property name="styleSheet">
-                                <string notr="true">border-radius: 0px;
-border: 0px;</string>
-                               </property>
-                               <property name="frameShape">
-                                <enum>QFrame::StyledPanel</enum>
-                               </property>
-                               <property name="frameShadow">
-                                <enum>QFrame::Raised</enum>
-                               </property>
-                               <layout class="QHBoxLayout" name="horizontalLayout_8">
-                                <property name="topMargin">
-                                 <number>1</number>
-                                </property>
-                                <property name="bottomMargin">
-                                 <number>1</number>
-                                </property>
-                                <item>
-                                 <widget class="QLabel" name="label_14">
-                                  <property name="sizePolicy">
-                                   <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                   </sizepolicy>
-                                  </property>
-                                  <property name="styleSheet">
-                                   <string notr="true"/>
-                                  </property>
-                                  <property name="text">
-                                   <string>avec:</string>
-                                  </property>
-                                 </widget>
-                                </item>
-                                <item>
-                                 <widget class="QComboBox" name="comboBox_2">
-                                  <property name="sizePolicy">
-                                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                   </sizepolicy>
-                                  </property>
-                                  <property name="minimumSize">
-                                   <size>
-                                    <width>0</width>
-                                    <height>20</height>
-                                   </size>
-                                  </property>
-                                  <property name="styleSheet">
-                                   <string notr="true"/>
-                                  </property>
-                                  <item>
-                                   <property name="text">
-                                    <string>nom et prenom</string>
-                                   </property>
-                                  </item>
-                                  <item>
-                                   <property name="text">
-                                    <string>RIP</string>
-                                   </property>
-                                  </item>
-                                 </widget>
-                                </item>
-                               </layout>
-                              </widget>
-                             </item>
-                             <item>
                               <widget class="QFrame" name="frame_18">
                                <property name="sizePolicy">
                                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -1181,26 +1108,6 @@ border: 0px;</string>
                            <height>16777215</height>
                           </size>
                          </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QComboBox" name="comboBox_3">
-                         <property name="minimumSize">
-                          <size>
-                           <width>100</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <item>
-                          <property name="text">
-                           <string>nom et pr</string>
-                          </property>
-                         </item>
-                         <item>
-                          <property name="text">
-                           <string>RIP</string>
-                          </property>
-                         </item>
                         </widget>
                        </item>
                       </layout>

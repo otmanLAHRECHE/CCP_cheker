@@ -28,11 +28,7 @@ class App(QtWidgets.QMainWindow):
         self.faut_request = self.findChild(QtWidgets.QLabel, "label_9")
 
         self.filter_ = self.findChild(QtWidgets.QComboBox, "comboBox")
-        self.search_with = self.findChild(QtWidgets.QComboBox, "comboBox_2")
         self.search_input = self.findChild(QtWidgets.QLineEdit, "lineEdit_2")
-
-        self.search = self.findChild(QtWidgets.QPushButton, "pushButton_3")
-        self.reset_search = self.findChild(QtWidgets.QPushButton, "pushButton_4")
 
         self.champ_compte = self.findChild(QtWidgets.QLineEdit, "lineEdit_3")
         self.table_compte = self.findChild(QtWidgets.QTableWidget, "tableWidget_2")
@@ -43,7 +39,6 @@ class App(QtWidgets.QMainWindow):
         self.status_frame = self.findChild(QtWidgets.QFrame, "frame_26")
 
         self.search_compte = self.findChild(QtWidgets.QLineEdit, "lineEdit_4")
-        self.search_compte_type = self.findChild(QtWidgets.QLineEdit, "comboBox_3")
 
         self.table_vers.setColumnWidth(0, 180)
         self.table_vers.setColumnWidth(1, 180)
@@ -69,6 +64,10 @@ class App(QtWidgets.QMainWindow):
         self.scan.clicked.connect(self.scan_event)
         self.reset_vers.clicked.connect(self.reset_vers_event)
         self.reset_compte.clicked.connect(self.reset_compte_event)
+
+        self.search_compte.textChanged.connect(self.filter_compte_changed)
+
+        self.search_input.textChanged.connect(self.filter_vers_changed)
 
         self.accounter = 0
         self.valide_accounter = 0
@@ -112,7 +111,6 @@ class App(QtWidgets.QMainWindow):
                 self.thr.start()
             else:
                 self.alert_("le fichier est vide")
-            
             
 
     def signal_progress(self, progress):
@@ -217,9 +215,6 @@ class App(QtWidgets.QMainWindow):
                 self.table_vers.item(row, 3).setBackground(QColor(247, 237, 96))
                 self.faut_request_accounter = self.faut_request_accounter + 1
                 self.faut_request.setText(str(self.faut_request_accounter))
-
-            
-
 
 
     def reset_vers_event(self):
@@ -345,7 +340,33 @@ class App(QtWidgets.QMainWindow):
         self.status_label.setText("status: not ready (import account file)")
     
 
-        
+    def filter_account_apr(self, filter_text):
+        for i in range(self.table_compte.rowCount()):
+            for j in range(self.table_compte.columnCount()):
+                item = self.table_compte.item(i, j)
+                match = filter_text.lower() not in item.text().lower()
+                self.table_compte.setRowHidden(i, match)
+                if not match:
+                    break
+
+
+    def filter_compte_changed(self, text):
+        self.filter_account_apr(text)
+
+
+    def filter_vers_apr(self, filter_text):
+        for i in range(self.table_vers.rowCount()):
+            for j in range(self.table_vers.columnCount()-2):
+                item = self.table_vers.item(i, j)
+                match = filter_text.lower() not in item.text().lower()
+                self.table_vers.setRowHidden(i, match)
+                if not match:
+                    break
+
+
+    def filter_vers_changed(self, text):
+        self.filter_vers_apr(text)
+
 
 
 
