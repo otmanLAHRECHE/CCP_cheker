@@ -66,45 +66,78 @@ class ThreadLoadingCompte(QThread):
     _signal_result_data = pyqtSignal(list)
     _signal_result = pyqtSignal(bool)
 
-    def __init__(self, array):
+    def __init__(self, array, mode):
         super(ThreadLoadingCompte, self).__init__()
         self.array = array
         self.ret = []
+        self.mode = mode
 
     def __del__(self):
         self.terminate()
         self.wait()
 
     def run(self):
-        for i in range(len(self.array)):
-            ligne = self.array[i]
-            compt = []
-            if(len(ligne)>0):
-                rip = ligne[1:21]
-                full_name = ligne[22:49]
-                pas_thr = True
-                for j in self.ret:
-                    if(j[0] == full_name):
-                        pas_thr = False
-                
-                compt.append(full_name)
-                compt.append(rip)
-                if(pas_thr):
-                    compt.append("good")
-                    self.ret.append(compt)
-                else:
-                    compt.append("dup")          
-                
-                self._signal_show.emit(compt)
+        if(self.mode == 0):
+            for i in range(len(self.array)):
+                ligne = self.array[i]
+                compt = []
+                if(len(ligne)>0):
+                    rip = ligne[1:21]
+                    full_name = ligne[34:61]
+                    pas_thr = True
+                    for j in self.ret:
+                        if(j[0] == full_name):
+                            pas_thr = False
+                    
+                    compt.append(full_name)
+                    compt.append(rip)
+                    if(pas_thr):
+                        compt.append("good")
+                        self.ret.append(compt)
+                    else:
+                        compt.append("dup")          
+                    
+                    self._signal_show.emit(compt)
 
-                
+                    
 
-            pors = i * 100
-            pors = pors / len(self.array)
-            self._signal.emit(pors)
-            time.sleep(0.02)
-        self._signal_result_data.emit(self.ret)
-        self._signal_result.emit(True)
+                pors = i * 100
+                pors = pors / len(self.array)
+                self._signal.emit(pors)
+                time.sleep(0.02)
+            self._signal_result_data.emit(self.ret)
+            self._signal_result.emit(True)
+
+        else:
+            for i in range(len(self.array)):
+                ligne = self.array[i]
+                compt = []
+                if(len(ligne)>0):
+                    rip = ligne[1:21]
+                    full_name = ligne[22:49]
+                    pas_thr = True
+                    for j in self.ret:
+                        if(j[0] == full_name):
+                            pas_thr = False
+                    
+                    compt.append(full_name)
+                    compt.append(rip)
+                    if(pas_thr):
+                        compt.append("good")
+                        self.ret.append(compt)
+                    else:
+                        compt.append("dup")          
+                    
+                    self._signal_show.emit(compt)
+
+                    
+
+                pors = i * 100
+                pors = pors / len(self.array)
+                self._signal.emit(pors)
+                time.sleep(0.02)
+            self._signal_result_data.emit(self.ret)
+            self._signal_result.emit(True)
 
 
 class ThreadScan(QThread):

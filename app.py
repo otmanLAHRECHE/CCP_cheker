@@ -40,6 +40,9 @@ class App(QtWidgets.QMainWindow):
 
         self.search_compte = self.findChild(QtWidgets.QLineEdit, "lineEdit_4")
 
+        self.import_compte_mode = self.findChild(QtWidgets.QComboBox, "comboBox_2")
+
+
         self.table_vers.setColumnWidth(0, 180)
         self.table_vers.setColumnWidth(1, 180)
         self.table_vers.setColumnWidth(2, 130)
@@ -173,6 +176,7 @@ class App(QtWidgets.QMainWindow):
             self.dialog.progress.setValue(100)
             self.dialog.close()
 
+
     def signal_aff_scan(self, progress):
         if type(progress) == list:
             self.dialog.full_name.setText(progress[0])
@@ -272,7 +276,8 @@ class App(QtWidgets.QMainWindow):
                 self.dialog.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
                 self.dialog.show()
 
-                self.thr = ThreadLoadingCompte(self.accounts_array)
+
+                self.thr = ThreadLoadingCompte(self.accounts_array, self.import_compte_mode.currentIndex())
                 self.thr._signal.connect(self.signal_progress_account)
                 self.thr._signal_result.connect(self.signal_progress_account)
                 self.thr._signal_result_data.connect(self.signal_progress_account)

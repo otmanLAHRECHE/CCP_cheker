@@ -994,6 +994,26 @@ border: 0px;</string>
                   </widget>
                  </item>
                  <item>
+                  <widget class="QComboBox" name="comboBox_2">
+                   <property name="minimumSize">
+                    <size>
+                     <width>110</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <item>
+                    <property name="text">
+                     <string>import mode(full)</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>import mode 02</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                 <item>
                   <widget class="QPushButton" name="pushButton_5">
                    <property name="text">
                     <string>réinitialiser</string>
